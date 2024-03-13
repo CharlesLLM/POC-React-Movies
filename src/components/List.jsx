@@ -1,32 +1,47 @@
 import { useEffect, useState } from "react";
+import options from "../TMDB-wrapper";
 
 function List() {
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZjI5NWEyNWQ2NTVlNGIyMjc1N2U0MDdjZThhMjUyZiIsInN1YiI6IjY1ZjE3NzkwMmZkZWM2MDE4OTIxOTE0MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0AzmkRMpkjUYf-ux_vX9o2meflI08vTnv43p_n-sR9g'
-      }
-    };
-
+  const getMovies = () => {
     fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
       .then(response => response.json())
       .then(response => {
         setMovies(response.results)
       })
       .catch(error => console.error(error));
+  }
+
+  useEffect(() => {
+    getMovies();
   }, []);
 
-  if (movies.length === 0) {
-    return <h2 className="text-center">Loading...</h2>
+  const searchMovies = (event) => {
+    console.log(event.target.value);
+    if (event.target.value === "") {
+      getMovies();
+    } else {
+      fetch(`https://api.themoviedb.org/3/search/multi?query=${event.target.value}&language=en-US&page=1&include_adult=false`, options)
+        .then(response => response.json())
+        .then(response => {
+          setMovies(response.results)
+        })
+        .catch(error => console.error(error));
+    }
   }
 
   return (
     <div>
       <div className="flex flex-wrap">
+        <div className="w-full p-4">
+          <input
+            type="text"
+            className="w-full p-4"
+            placeholder="Search for a movie"
+            onInput={searchMovies}
+          />
+        </div>
         {movies.map((movie, index) => (
           <div key={index} className="w-1/4 p-4">
             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
