@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import options from "../TMDB-wrapper";
-import Search from "./Search";
+import SearchText from "./SearchText";
 
 function List() {
   const [movies, setMovies] = useState([]);
 
   const getMovies = () => {
-    fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&include_adult=false', options)
+    fetch('https://api.themoviedb.org/3/movie/now_playing?language=fr&page=1&include_adult=false', options)
       .then(response => response.json())
       .then(response => {
         setMovies(response.results)
@@ -18,11 +18,11 @@ function List() {
     getMovies();
   }, []);
 
-  const searchMovies = (event) => {
-    if (event.target.value === "") {
+  const searchMovies = (searchText) => {
+    if (searchText === "") {
       getMovies();
     } else {
-      fetch(`https://api.themoviedb.org/3/search/multi?language=en-US&page=1&include_adult=false&query=${event.target.value}`, options)
+      fetch(`https://api.themoviedb.org/3/search/multi?language=fr&page=1&include_adult=false&query=${searchText}`, options)
         .then(response => response.json())
         .then(response => {
           setMovies(response.results);
@@ -33,7 +33,7 @@ function List() {
 
   return (
     <div className="flex flex-wrap">
-      <Search searchMovies={searchMovies} />
+      <SearchText searchMovies={searchMovies} />
       {movies.map((movie, index) => (
         <div key={index} className="w-1/4 p-4">
           <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />

@@ -5,7 +5,7 @@ import { db } from "./db";
 
 function App() {
   useEffect(() => {
-    fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+    fetch('https://api.themoviedb.org/3/genre/movie/list?language=fr', options)
       .then((res) => res.json())
       .then(async (data) => {
         if ((await db.genres.count()) !== data.genres.length) {
