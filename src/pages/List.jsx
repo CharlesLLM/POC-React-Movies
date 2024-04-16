@@ -53,8 +53,8 @@ function List() {
     <div className="flex flex-wrap">
       <h1 className="w-full text-center">Movies list</h1>
       <SearchForm genres={genres} handleInput={handleInput} handleGenreSelect={handleGenreSelect} />
-      {movies.map((movie, index) => (
-        <div key={index} className="w-1/3 p-4">
+      {movies.map((movie) => (
+        <div key={movie.id} className="w-1/3 p-4">
           <MovieItem movie={movie} genres={genres} />
         </div>
       ))}
